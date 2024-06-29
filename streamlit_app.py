@@ -10,24 +10,11 @@ from helper_functions import get_data, get_credentials
 from ui_functions import on_click_continue
 from story import Story
 
-# Get Snowflake credentials
-snowflake_user, snowflake_password, snowflake_account = get_credentials()
-
-# Establish connection to Snowflake
-conn = snowflake.connector.connect(
-    user=snowflake_user,
-    password=snowflake_password,
-    account=snowflake_account
-)
-
 st.title("La Tortuga Gigante")
 
 # create instance of the story class
 if "story" not in st.session_state:
     st.session_state.story = Story()
-    st.session_state.story.segments = get_data(conn, "select * from educational_technology.stories.la_tortuga_gigante limit 10")
-    st.session_state.story.total_number_of_segments = len(st.session_state.story.segments)
-    st.session_state.story.num_segments_displayed += 1
 
 # Display segments
 for i in range(0, st.session_state.story.num_segments_displayed):

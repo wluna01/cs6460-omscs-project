@@ -1,5 +1,6 @@
 import os
 import streamlit as st
+import snowflake.connector
 
 def get_credentials():
     # Get the credentials from the environment variables when running locally
@@ -13,10 +14,21 @@ def get_credentials():
         snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
     return snowflake_user, snowflake_password, snowflake_account
 
-def get_data(connection, query):
-    cursor = connection.cursor()
+def get_data(query):
+    # Get Snowflake credentials
+    snowflake_user, snowflake_password, snowflake_account = get_credentials()
+
+    # Establish connection to Snowflake
+    conn = snowflake.connector.connect(
+        user=snowflake_user,
+        password=snowflake_password,
+        account=snowflake_account
+    )
+
+    cursor = conn.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    connection.close()
+    conn.close()
+
     return result
