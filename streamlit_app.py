@@ -17,5 +17,12 @@ else:
     snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
     snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
 
+# Establish the connection
+conn = snowflake.connector.connect(
+    user=snowflake_user,
+    password=snowflake_password,
+    account=snowflake_account
+)
+
 st.write("Hello, world!")
 st.write("Oh Brave New World, that has such people in it! with datetime")
