@@ -69,3 +69,7 @@ def add_flashcard(word):
             VALUES (s.word, s.num_consecutive_successful_reviews, s.last_reviewed_at_utc, s.next_review_due_at_utc)
     """
     execute_sql(sql)
+
+def get_review_word():
+    sql = f"""select word from educational_technology.vocabulary.wluna order by next_review_due_at_utc desc limit 1"""
+    return get_data(sql)[0][0]

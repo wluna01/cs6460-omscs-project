@@ -2,10 +2,15 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
-from datetime import datetime, timedelta 
 import nltk
 from ui_functions import on_click_continue, on_click_dictionary_lookup
 from story import Story
+
+#testing only
+if "review_word" not in st.session_state:
+    st.session_state.review_word = "nothing yet"
+if "test_response" not in st.session_state:
+    st.session_state.test_response = "nothing yet"
 
 st.title("La Tortuga Gigante")
 
@@ -30,4 +35,7 @@ definition_text = st.text(st.session_state.definition)
 st.title("Diagnostics")
 st.write("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
 st.write("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
+st.write("Word to Incorporate in Re-written segment: " + str(st.session_state.review_word))
+st.write("Re-written Segment: " + str(st.session_state.test_response))
+
 #st.write(story.segments[0][1])
