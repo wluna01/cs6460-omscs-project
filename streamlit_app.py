@@ -25,8 +25,9 @@ if "story" not in st.session_state:
 # Display segments
 #st.dataframe(st.session_state.story.segments)
 for index, row in st.session_state.story.segments.iterrows():
-    st.write(row['STORY_SEGMENT_NUMBER'])
-    st.write(row['STORY_SEGMENT_TEXT'])
+    if index < st.session_state.story.num_segments_displayed:
+        st.write(index+1)
+        st.write(row['STORY_SEGMENT_TEXT'])
 
 #for i in range(0, st.session_state.story.num_segments_displayed):
     #st.write(st.session_state.story.segments[i][0])
