@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 import nltk
 import snowflake.connector
 import os
-from helper_functions import get_data
-
+from helper_functions import get_data, get_credentials
+'''
 if 'SNOWFLAKE_USER' in os.environ:
     snowflake_user = os.getenv('SNOWFLAKE_USER')
     snowflake_password = os.getenv('SNOWFLAKE_PASSWORD')
@@ -17,6 +17,8 @@ else:
     snowflake_user = st.secrets["SNOWFLAKE_USER"]
     snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
     snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
+'''
+snowflake_user, snowflake_password, snowflake_account = get_credentials()
 
 # Establish the connection
 conn = snowflake.connector.connect(
