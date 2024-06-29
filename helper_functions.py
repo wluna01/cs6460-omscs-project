@@ -2,6 +2,7 @@ import os
 import streamlit as st
 import snowflake.connector
 from datetime import datetime, timedelta 
+import random
 
 def get_credentials():
     # Get the credentials from the environment variables when running locally
@@ -56,7 +57,7 @@ def add_flashcard(word):
     next_review = current_time + timedelta(minutes=1)
     # if the word is already in the table, resets the review time
     sql = f"""
-        MERGE INTO educational_technology.vocabulary.wluna as t 
+        MERGE INTO educational_technology.mvp_project.flashcards as t 
         USING (select '{word}' as word, 0 as num_consecutive_successful_reviews, '{current_time}' as last_reviewed_at_utc, '{next_review}' as next_review_due_at_utc) as s
         ON t.word = s.word
         WHEN MATCHED THEN
@@ -71,5 +72,14 @@ def add_flashcard(word):
     execute_sql(sql)
 
 def get_review_word():
-    sql = f"""select word from educational_technology.vocabulary.wluna order by next_review_due_at_utc desc limit 1"""
+    sql = f"""select word from educational_technology.mvp_project.flashcards order by next_review_due_at_utc desc limit 1"""
     return get_data(sql)[0][0]
+
+def generate_identifier():
+    colors = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Black", "White", "Grey"]
+    animals = ["Lion", "Tiger", "Bear", "Kangaroo", "Eagle", "Falcon", "Wolf", "Fox", "Rabbit"]
+
+    color = random.choice(colors)
+    animal = random.choice(animals)
+
+    return f"{color}{animal}"

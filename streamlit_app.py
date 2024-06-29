@@ -4,7 +4,11 @@ import pandas as pd
 import streamlit as st
 import nltk
 from ui_functions import on_click_continue, on_click_dictionary_lookup
+from helper_functions import generate_identifier
 from story import Story
+
+st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
+st.text_input(label="User Name (randomly generated during demo)", value=generate_identifier(), max_chars=20)
 
 #testing only
 if "review_word" not in st.session_state:
@@ -32,10 +36,10 @@ word_to_lookup = st.text_input("Palabra Desconocida :thinking_face:", max_chars=
 st.button("Buscar", on_click=on_click_dictionary_lookup(word_to_lookup))
 definition_text = st.text(st.session_state.definition)
 
-st.title("Diagnostics")
-st.write("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
-st.write("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
-st.write("Word to Incorporate in Re-written segment: " + str(st.session_state.review_word))
-st.write("Re-written Segment: " + str(st.session_state.test_response))
+with st.expander("Diagnostics"):
+    st.write("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
+    st.write("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
+    st.write("Word to Incorporate in Re-written segment: " + str(st.session_state.review_word))
+    st.write("Re-written Segment: " + str(st.session_state.test_response))
 
 #st.write(story.segments[0][1])
