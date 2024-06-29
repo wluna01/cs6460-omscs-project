@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta 
 import nltk
+import snowflake.connector
 
 st.write("Hello, world!")
 st.write("Oh Brave New World, that has such people in it! with datetime")
