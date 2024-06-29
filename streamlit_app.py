@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import nltk
 import snowflake.connector
 import os
+import helper_functions
 
 if 'SNOWFLAKE_USER' in os.environ:
     snowflake_user = os.getenv('SNOWFLAKE_USER')
@@ -17,14 +18,6 @@ else:
     snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
     snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
 
-def get_data(query):
-    cursor = conn.cursor()
-    cursor.execute(query)
-    result = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return result
-
 # Establish the connection
 conn = snowflake.connector.connect(
     user=snowflake_user,
@@ -32,7 +25,7 @@ conn = snowflake.connector.connect(
     account=snowflake_account
 )
 
-story_portions = get_data("SELECT * FROM educational_technology.stories.la_tortuga_gigante LIMIT 10")
+story_portions = get_data("select * from educational_technology.stories.la_tortuga_gigante limit 10")
 st.write(story_portions[0][1])
 
 st.write("Hello, world!")
