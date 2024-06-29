@@ -1,7 +1,7 @@
-def get_data(query):
-    cursor = conn.cursor()
+def get_data(connection, query):
+    cursor = connection.cursor()
     cursor.execute(query)
     result = cursor.fetchall()
     cursor.close()
-    conn.close()
+    connection.close()
     return result

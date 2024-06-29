@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import nltk
 import snowflake.connector
 import os
-import helper_functions
+from helper_functions import get_data
 
 if 'SNOWFLAKE_USER' in os.environ:
     snowflake_user = os.getenv('SNOWFLAKE_USER')
@@ -25,7 +25,7 @@ conn = snowflake.connector.connect(
     account=snowflake_account
 )
 
-story_portions = get_data("select * from educational_technology.stories.la_tortuga_gigante limit 10")
+story_portions = get_data(conn, "select * from educational_technology.stories.la_tortuga_gigante limit 10")
 st.write(story_portions[0][1])
 
 st.write("Hello, world!")
