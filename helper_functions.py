@@ -43,23 +43,19 @@ def load_story(story_name, user_name):
     #"select * from educational_technology.stories.la_tortuga_gigante limit 10
 
     #get all the rewritten segments of the story, if any, for this user
-    query_rewritten_segments = f"""
+    story_segments_query = f"""
         select
-            story_segment_number,
-            story_segment_text
-        from educational_technology.mvp_project.rewritten_story_segments
-        where story_name = '{story_name}' and user_name = '{user_name}'
+            o.story_segment_number,
+            coalesce(r.story_segment_text, o.story_segment_text) as story_segment_text
+        from educational_technology.mvp_project.original_story_segments as o
+        left join educational_technology.mvp_project.rewritten_story_segments as r
+            on o.story_segment_number = r.story_segment_number
+            and r.story_name = '{story_name}'
+            and r.user_name = '{user_name}'
+        where o.story_name = '{story_name}'
     """
-    rewritten_segments = get_data(query_rewritten_segments)
+    story_segments = get_data(story_segments_query)
 
-    query_original_segments = f"""
-        select
-            story_segment_number,
-            story_segment_text
-        from educational_technology.mvp_project.original_story_segments
-        where story_name = '{story_name}'
-    """
-    original_segments = get_data(query_original_segments)
 
     
 
@@ -84,23 +80,24 @@ def add_flashcard(word):
     current_time = datetime.now()
     next_review = current_time + timedelta(minutes=1)
     # if the word is already in the table, resets the review time
+    user_name = str(st.session_state.user_name)
     sql = f"""
         MERGE INTO educational_technology.mvp_project.flashcards as t 
-        USING (select '{word}' as word, 0 as num_consecutive_successful_reviews, '{current_time}' as last_reviewed_at_utc, '{next_review}' as next_review_due_at_utc) as s
-        ON t.word = s.word
+        USING (select '{user_name}' as user_name, '{word}' as word, 0 as num_consecutive_successful_reviews, '{current_time}' as last_reviewed_at_utc, '{next_review}' as next_review_scheduled_at_utc) as s
+        ON t.word = s.word AND t.user_name = s.user_name
         WHEN MATCHED THEN
             UPDATE SET
                 t.num_consecutive_successful_reviews = s.num_consecutive_successful_reviews,
                 t.last_reviewed_at_utc = s.last_reviewed_at_utc,
-                t.next_review_due_at_utc = s.next_review_due_at_utc
+                t.next_review_scheduled_at_utc = s.next_review_scheduled_at_utc
         WHEN NOT MATCHED THEN
-            INSERT (word, num_consecutive_successful_reviews, last_reviewed_at_utc, next_review_due_at_utc)
-            VALUES (s.word, s.num_consecutive_successful_reviews, s.last_reviewed_at_utc, s.next_review_due_at_utc)
+            INSERT (user_name, word, num_consecutive_successful_reviews, last_reviewed_at_utc, next_review_scheduled_at_utc)
+            VALUES (s.user_name, s.word, s.num_consecutive_successful_reviews, s.last_reviewed_at_utc, s.next_review_scheduled_at_utc)
     """
     execute_sql(sql)
 
 def get_review_word():
-    sql = f"""select word from educational_technology.mvp_project.flashcards order by next_review_due_at_utc desc limit 1"""
+    sql = f"""select word from educational_technology.mvp_project.flashcards order by next_review_scheduled_at_utc desc limit 1"""
     return get_data(sql)[0][0]
 
 def generate_identifier():

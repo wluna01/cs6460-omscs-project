@@ -18,6 +18,7 @@ class Story:
                 and r.story_name = '{self.story_name}'
                 and r.user_name = '{self.user_name}'
             where o.story_name = '{self.story_name}'
+            order by o.story_segment_number asc
         """
         self.segments = get_data(story_segments_query)
         #self.segments = load_story(self.story_name, self.user_name)

@@ -8,7 +8,7 @@ from helper_functions import generate_identifier
 from story import Story
 
 st.session_state.story_name = st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
-st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo)", value=generate_identifier(), max_chars=20)
+st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=generate_identifier(), max_chars=20)
 
 #testing only
 if "review_word" not in st.session_state:
