@@ -4,9 +4,6 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime, timedelta 
 import nltk
-import snowflake.connector
-import os
-from helper_functions import get_data, get_credentials
 from ui_functions import on_click_continue, on_click_dictionary_lookup
 from story import Story
 

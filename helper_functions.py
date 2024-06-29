@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import snowflake.connector
+from datetime import datetime, timedelta 
 
 def get_credentials():
     # Get the credentials from the environment variables when running locally
@@ -32,3 +33,39 @@ def get_data(query):
     conn.close()
 
     return result
+
+def execute_sql(query):
+    # Get Snowflake credentials
+    snowflake_user, snowflake_password, snowflake_account = get_credentials()
+
+    # Establish connection to Snowflake
+    conn = snowflake.connector.connect(
+        user=snowflake_user,
+        password=snowflake_password,
+        account=snowflake_account
+    )
+
+    cursor = conn.cursor()
+    cursor.execute(query)
+    cursor.close()
+    conn.close()
+
+
+def add_flashcard(word):
+    current_time = datetime.now()
+    next_review = current_time + timedelta(minutes=1)
+    # if the word is already in the table, resets the review time
+    sql = f"""
+        MERGE INTO educational_technology.vocabulary.wluna as t 
+        USING (select '{word}' as word, 0 as num_consecutive_successful_reviews, '{current_time}' as last_reviewed_at_utc, '{next_review}' as next_review_due_at_utc) as s
+        ON t.word = s.word
+        WHEN MATCHED THEN
+            UPDATE SET
+                t.num_consecutive_successful_reviews = s.num_consecutive_successful_reviews,
+                t.last_reviewed_at_utc = s.last_reviewed_at_utc,
+                t.next_review_due_at_utc = s.next_review_due_at_utc
+        WHEN NOT MATCHED THEN
+            INSERT (word, num_consecutive_successful_reviews, last_reviewed_at_utc, next_review_due_at_utc)
+            VALUES (s.word, s.num_consecutive_successful_reviews, s.last_reviewed_at_utc, s.next_review_due_at_utc)
+    """
+    execute_sql(sql)
