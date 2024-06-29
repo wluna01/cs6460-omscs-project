@@ -7,11 +7,8 @@ import nltk
 import snowflake.connector
 import os
 from helper_functions import get_data, get_credentials
+from ui_functions import on_click_continue
 from story import Story
-
-def on_click_continue():
-    #if story.num_segments_displayed < story.total_number_of_segments:
-    st.session_state.story.num_segments_displayed += 1
 
 # Get Snowflake credentials
 snowflake_user, snowflake_password, snowflake_account = get_credentials()
