@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import snowflake.connector
+from snowflake.connector.pandas_tools import pd_writer
 from datetime import datetime, timedelta 
 import random
 
@@ -17,6 +18,8 @@ def get_credentials():
     return snowflake_user, snowflake_password, snowflake_account
 
 def get_data(query):
+# allegedly returns either a list of lists that represents the table
+# or an empty list if the query returns no results
     # Get Snowflake credentials
     snowflake_user, snowflake_password, snowflake_account = get_credentials()
 
@@ -29,11 +32,36 @@ def get_data(query):
 
     cursor = conn.cursor()
     cursor.execute(query)
-    result = cursor.fetchall()
+    #result = cursor.fetchall()
+    df = cursor.fetch_pandas_all()
     cursor.close()
     conn.close()
 
-    return result
+    return df
+
+def load_story(story_name, user_name):
+    #"select * from educational_technology.stories.la_tortuga_gigante limit 10
+
+    #get all the rewritten segments of the story, if any, for this user
+    query_rewritten_segments = f"""
+        select
+            story_segment_number,
+            story_segment_text
+        from educational_technology.mvp_project.rewritten_story_segments
+        where story_name = '{story_name}' and user_name = '{user_name}'
+    """
+    rewritten_segments = get_data(query_rewritten_segments)
+
+    query_original_segments = f"""
+        select
+            story_segment_number,
+            story_segment_text
+        from educational_technology.mvp_project.original_story_segments
+        where story_name = '{story_name}'
+    """
+    original_segments = get_data(query_original_segments)
+
+    
 
 def execute_sql(query):
     # Get Snowflake credentials
