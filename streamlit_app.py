@@ -9,6 +9,10 @@ import os
 from helper_functions import get_data, get_credentials
 from story import Story
 
+def on_click_continue():
+    #if story.num_segments_displayed < story.total_number_of_segments:
+    st.session_state.story.num_segments_displayed += 1
+
 # Get Snowflake credentials
 snowflake_user, snowflake_password, snowflake_account = get_credentials()
 
@@ -22,11 +26,23 @@ conn = snowflake.connector.connect(
 st.title("La Tortuga Gigante")
 
 # create instance of the story class
-story = Story()
-if story.has_pulled_segments == False:
-    story.segments = get_data(conn, "select * from educational_technology.stories.la_tortuga_gigante limit 10")
-    story.has_pulled_segments = True
-    story.total_number_of_segments = len(story.segments)
+if "story" not in st.session_state:
+    st.session_state.story = Story()
+    st.session_state.story.segments = get_data(conn, "select * from educational_technology.stories.la_tortuga_gigante limit 10")
+    st.session_state.story.total_number_of_segments = len(st.session_state.story.segments)
+    st.session_state.story.num_segments_displayed += 1
 
-#story_portions = get_data(conn, "select * from educational_technology.stories.la_tortuga_gigante limit 10")
-st.write(story.segments[0][1])
+# Display segments
+for i in range(0, st.session_state.story.num_segments_displayed):
+    st.write(st.session_state.story.segments[i][0])
+    st.write(st.session_state.story.segments[i][1])
+
+if st.session_state.story.num_segments_displayed < st.session_state.story.total_number_of_segments:
+    st.button("Continuar", on_click=on_click_continue)
+else:
+    st.title("Fin")
+
+st.title("Diagnostics")
+st.write("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
+st.write("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
+#st.write(story.segments[0][1])
