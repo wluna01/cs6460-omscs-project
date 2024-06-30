@@ -3,7 +3,6 @@ import streamlit as st
 
 def on_click_continue():
     #get the next flashcard to study
-    #review_word = get_review_word()
     get_review_word()
     #if this user has a flashcard
     #if st.session_state.review_word is not None:
@@ -14,9 +13,6 @@ def on_click_continue():
         #response = get_data(query)
     #if there are no reviews to incorporate, just display the next segment
     st.session_state.story.num_segments_displayed += 1
-    
-    #st.session_state.test_response = "some response change"
-    #st.session_state.test_response = response[0][0]
 
 def on_click_dictionary_lookup(word):
     if word:
