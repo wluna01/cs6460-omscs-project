@@ -97,8 +97,13 @@ def add_flashcard(word):
     execute_sql(sql)
 
 def get_review_word():
-    sql = f"""select word from educational_technology.mvp_project.flashcards order by next_review_scheduled_at_utc desc limit 1"""
-    return get_data(sql)[0][0]
+    user_name = str(st.session_state.user_name)
+    sql = f"""select word from educational_technology.mvp_project.flashcards where user_name = '{user_name}' order by next_review_scheduled_at_utc desc limit 1"""
+    review_word = get_data(sql)
+    if review_word.empty == False:
+        return review_word.iat[0,0]
+    else:
+        return None
 
 def generate_identifier():
     colors = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Black", "White", "Grey"]
