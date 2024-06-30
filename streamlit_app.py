@@ -10,6 +10,8 @@ from story import Story
 st.session_state.story_name = st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
 if "user_name" not in st.session_state:
     st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=generate_identifier(), max_chars=20)
+else:
+    st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=st.session_state.user_name, max_chars=20)
 
 #testing only
 if "review_word" not in st.session_state:
@@ -48,5 +50,8 @@ with st.expander("Diagnostics"):
     st.write("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
     st.write("Word to Incorporate in Re-written segment: " + str(st.session_state.review_word))
     st.write("Re-written Segment: " + str(st.session_state.test_response))
+    st.write("Review Word is: " + str(st.session_state.review_word))
+    st.write("All Segments:")
+    st.dataframe(st.session_state.story.segments)
 
 #st.write(story.segments[0][1])

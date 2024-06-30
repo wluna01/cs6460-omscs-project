@@ -56,9 +56,6 @@ def load_story(story_name, user_name):
     """
     story_segments = get_data(story_segments_query)
 
-
-    
-
 def execute_sql(query):
     # Get Snowflake credentials
     snowflake_user, snowflake_password, snowflake_account = get_credentials()
