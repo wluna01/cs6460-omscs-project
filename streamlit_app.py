@@ -14,10 +14,10 @@ else:
     st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=st.session_state.user_name, max_chars=20)
 
 #testing only
-if "review_word" not in st.session_state:
-    st.session_state.review_word = "nothing yet"
-if "test_response" not in st.session_state:
-    st.session_state.test_response = "nothing yet"
+#if "review_word" not in st.session_state:
+#    st.session_state.review_word = "nothing yet"
+#if "test_response" not in st.session_state:
+#    st.session_state.test_response = "nothing yet"
 
 st.title("La Tortuga Gigante")
 
@@ -46,11 +46,13 @@ st.button("Buscar", on_click=on_click_dictionary_lookup(word_to_lookup))
 definition_text = st.text(st.session_state.definition)
 
 with st.expander("Diagnostics"):
-    st.write("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
-    st.write("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
-    st.write("Word to Incorporate in Re-written segment: " + str(st.session_state.review_word))
-    st.write("Re-written Segment: " + str(st.session_state.test_response))
-    st.write("Review Word is: " + str(st.session_state.review_word))
+    st.text("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
+    st.text("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
+    #st.write("Word to Incorporate in Re-written segment: " + str(st.session_state.review_word))
+    #st.write("Re-written Segment: " + str(st.session_state.test_response))
+    if "review_word" in st.session_state:
+        st.write("Review DF is: ")
+        st.dataframe(st.session_state.review_word)
     st.write("All Segments:")
     st.dataframe(st.session_state.story.segments)
 

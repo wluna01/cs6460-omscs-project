@@ -3,10 +3,11 @@ import streamlit as st
 
 def on_click_continue():
     #get the next flashcard to study
-    review_word = get_review_word()
+    #review_word = get_review_word()
+    get_review_word()
     #if this user has a flashcard
-    if review_word:
-        st.session_state.review_word = review_word
+    #if st.session_state.review_word is not None:
+    #    st.session_state.review_word = review_word
         #text = st.session_state.story.segments[st.session_state.story.num_segments_displayed][1]
         #prompt = f"""Please rewrite a story excerpt. Your rewrite should include at least one instance of the word: {review_word}. Do not preface your response in any way, only include the rewritten passage, and rewrite the passage in the original language of the text. The excerpt is: {text}"""
         #query = f"""select snowflake.cortex.complete('llama3-70b', '{prompt}')"""
