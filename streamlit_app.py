@@ -7,7 +7,7 @@ from ui_functions import on_click_continue, on_click_dictionary_lookup
 from helper_functions import generate_identifier
 from story import Story
 from text_to_speech import text_to_speech
-from ui_components import show_sidebar
+from ui_components import show_sidebar, show_highlightable_passage
 
 st.session_state.story_name = st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
 if "user_name" not in st.session_state:
@@ -28,7 +28,8 @@ auto_play = st.toggle("Auto Play Audio", value=False)
 for index, row in st.session_state.story.segments.iterrows():
     if index < st.session_state.story.num_segments_displayed:
         st.write(index+1)
-        st.write(row['STORY_SEGMENT_TEXT'])
+        #st.write(row['STORY_SEGMENT_TEXT'])
+        show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
         play_this = st.button(play_icon)
         #if the play button was clicked or auto play is on and this is the last segment
         if play_this or (auto_play and index == st.session_state.story.num_segments_displayed-1):
