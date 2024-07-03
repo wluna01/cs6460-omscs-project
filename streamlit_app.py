@@ -7,6 +7,7 @@ from ui_functions import on_click_continue, on_click_dictionary_lookup
 from helper_functions import generate_identifier
 from story import Story
 from text_to_speech import text_to_speech
+from ui_components import show_sidebar
 
 st.session_state.story_name = st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
 if "user_name" not in st.session_state:
@@ -45,13 +46,4 @@ word_to_lookup = st.text_input("Dictionary :thinking_face:", max_chars=20)
 st.button("Search", on_click=on_click_dictionary_lookup(word_to_lookup))
 definition_text = st.text(st.session_state.definition)
 
-with st.sidebar:
-    st.title("Settings")
-    with st.expander("Diagnostics"):
-        st.text("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
-        st.text("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
-        if "review_word" in st.session_state:
-            st.write("Review DF is: ")
-            st.dataframe(st.session_state.review_word)
-        st.write("All Segments:")
-        st.dataframe(st.session_state.story.segments)
+show_sidebar()
