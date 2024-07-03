@@ -14,23 +14,27 @@ if "user_name" not in st.session_state:
 else:
     st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=st.session_state.user_name, max_chars=20)
 
-audio_is_on = st.toggle("Audio", True)
-
 st.title("The Giant Tortoise")
-
+play_icon = "▶️"
 # create instance of the story class
 if "story" not in st.session_state:
     st.session_state.story = Story()
+
+#auto play toggle set to off by default
+auto_play = st.toggle("Auto Play Audio", value=False)
 
 # Display segments
 for index, row in st.session_state.story.segments.iterrows():
     if index < st.session_state.story.num_segments_displayed:
         st.write(index+1)
-        if audio_is_on:
+        st.write(row['STORY_SEGMENT_TEXT'])
+        play_this = st.button(play_icon)
+        #if the play button was clicked or auto play is on and this is the last segment
+        if play_this or (auto_play and index == st.session_state.story.num_segments_displayed-1):
+            #generate and play the audio
             audio_file = text_to_speech(row['STORY_SEGMENT_TEXT'])
             audio_bytes = open(audio_file, 'rb').read()
             st.audio(audio_bytes, format='audio/mp3', autoplay=True)
-        st.write(row['STORY_SEGMENT_TEXT'])
 
 if st.session_state.story.num_segments_displayed < st.session_state.story.total_number_of_segments:
     st.button("Continue", on_click=on_click_continue)
@@ -41,11 +45,13 @@ word_to_lookup = st.text_input("Dictionary :thinking_face:", max_chars=20)
 st.button("Search", on_click=on_click_dictionary_lookup(word_to_lookup))
 definition_text = st.text(st.session_state.definition)
 
-with st.expander("Diagnostics"):
-    st.text("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
-    st.text("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
-    if "review_word" in st.session_state:
-        st.write("Review DF is: ")
-        st.dataframe(st.session_state.review_word)
-    st.write("All Segments:")
-    st.dataframe(st.session_state.story.segments)
+with st.sidebar:
+    st.title("Settings")
+    with st.expander("Diagnostics"):
+        st.text("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
+        st.text("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
+        if "review_word" in st.session_state:
+            st.write("Review DF is: ")
+            st.dataframe(st.session_state.review_word)
+        st.write("All Segments:")
+        st.dataframe(st.session_state.story.segments)
