@@ -56,9 +56,6 @@ def load_story(story_name, user_name):
     """
     story_segments = get_data(story_segments_query)
 
-
-    
-
 def execute_sql(query):
     # Get Snowflake credentials
     snowflake_user, snowflake_password, snowflake_account = get_credentials()
@@ -98,12 +95,13 @@ def add_flashcard(word):
 
 def get_review_word():
     user_name = str(st.session_state.user_name)
-    sql = f"""select word from educational_technology.mvp_project.flashcards where user_name = '{user_name}' order by next_review_scheduled_at_utc desc limit 1"""
+    sql = f"""select word from educational_technology.mvp_project.flashcards where user_name = '{user_name}' order by next_review_scheduled_at_utc desc"""
     review_word = get_data(sql)
-    if review_word.empty == False:
-        return review_word.iat[0,0]
-    else:
-        return None
+    st.session_state.review_word = review_word
+    #if review_word.empty == False:
+    #    return review_word.iat[0,0]
+    #else:
+    #    return None
 
 def generate_identifier():
     colors = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Black", "White", "Grey"]
