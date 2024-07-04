@@ -25,10 +25,10 @@ if "story" not in st.session_state:
 
 # Display segments
 for index, row in st.session_state.story.story_segments.iterrows():
+    play_this = st.button(play_icon)
+    show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
     if play_this: # or (st.session_state.auto_play and index == st.session_state.story.num_segments_displayed-1):
         play_audio(row['STORY_SEGMENT_TEXT'])
-    show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
-    play_this = st.button(play_icon)
 
     #if index < st.session_state.story.num_segments_displayed:
         #st.write(index+1)

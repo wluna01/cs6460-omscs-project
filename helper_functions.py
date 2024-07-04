@@ -152,7 +152,8 @@ def start_story(user_name: str, story_name: str) -> None:
         story_name (str): The name of the story.
     """
     sql = get_sql("sql_queries/get_first_story_segment.sql", story_name=story_name)
-    first_story_segment = execute_sql(sql, returns_results=True)
+    first_story_segment_df = execute_sql(sql, returns_results=True)
+    first_story_segment = first_story_segment_df.iat[0,0]
     sql = get_sql("sql_queries/insert_user_story_segment.sql", user_name=user_name, story_name=story_name, story_segment_number=1, story_segment_text=first_story_segment)
     execute_sql(sql)
 
