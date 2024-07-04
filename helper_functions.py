@@ -4,59 +4,37 @@ import snowflake.connector
 from snowflake.connector.pandas_tools import pd_writer
 from datetime import datetime, timedelta 
 import random
+import pandas as pd
 
 def get_credentials():
-    # Get the credentials from the environment variables when running locally
-    if 'SNOWFLAKE_USER' in os.environ:
+    """Fetches Snowflake credentials for database authentication.
+    Secrets available locally and via Streamlit Cloud.
+
+    Args: None
+
+    Returns:
+        tuple: Snowflake credentials (user, password, account)
+    """
+    
+    if 'SNOWFLAKE_USER' in os.environ: # Local development
         snowflake_user = os.getenv('SNOWFLAKE_USER')
         snowflake_password = os.getenv('SNOWFLAKE_PASSWORD')
         snowflake_account = os.getenv('SNOWFLAKE_ACCOUNT')
-    else: # Fallback to Streamlit secrets in production
+    else: # Streamlit Cloud
         snowflake_user = st.secrets["SNOWFLAKE_USER"]
         snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
         snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
     return snowflake_user, snowflake_password, snowflake_account
 
-def get_data(query):
-# allegedly returns either a list of lists that represents the table
-# or an empty list if the query returns no results
-    # Get Snowflake credentials
-    snowflake_user, snowflake_password, snowflake_account = get_credentials()
+def execute_sql(query, returns_results=False):
+    """Executes a SQL query on Snowflake with option to returns the results as a pandas DataFrame.
 
-    # Establish connection to Snowflake
-    conn = snowflake.connector.connect(
-        user=snowflake_user,
-        password=snowflake_password,
-        account=snowflake_account
-    )
+    Args:
+        query (str): The SQL query to execute.
 
-    cursor = conn.cursor()
-    cursor.execute(query)
-    #result = cursor.fetchall()
-    df = cursor.fetch_pandas_all()
-    cursor.close()
-    conn.close()
-
-    return df
-
-def load_story(story_name, user_name):
-    #"select * from educational_technology.stories.la_tortuga_gigante limit 10
-
-    #get all the rewritten segments of the story, if any, for this user
-    story_segments_query = f"""
-        select
-            o.story_segment_number,
-            coalesce(r.story_segment_text, o.story_segment_text) as story_segment_text
-        from educational_technology.mvp_project.original_story_segments as o
-        left join educational_technology.mvp_project.rewritten_story_segments as r
-            on o.story_segment_number = r.story_segment_number
-            and r.story_name = '{story_name}'
-            and r.user_name = '{user_name}'
-        where o.story_name = '{story_name}'
+    Returns:
+        pd.DataFrame: A DataFrame representing the query results.
     """
-    story_segments = get_data(story_segments_query)
-
-def execute_sql(query):
     # Get Snowflake credentials
     snowflake_user, snowflake_password, snowflake_account = get_credentials()
 
@@ -69,8 +47,14 @@ def execute_sql(query):
 
     cursor = conn.cursor()
     cursor.execute(query)
+    if returns_results:
+        df = cursor.fetch_pandas_all()  # Fetch the query results as a pandas DataFrame
+
     cursor.close()
     conn.close()
+
+    if returns_results:
+        return df
 
 
 def add_flashcard(word):
@@ -96,7 +80,7 @@ def add_flashcard(word):
 def get_review_word():
     user_name = str(st.session_state.user_name)
     sql = f"""select word from educational_technology.mvp_project.flashcards where user_name = '{user_name}' order by next_review_scheduled_at_utc desc"""
-    review_word = get_data(sql)
+    review_word = execute_sql(sql)
     st.session_state.review_word = review_word
     #if review_word.empty == False:
     #    return review_word.iat[0,0]

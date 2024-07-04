@@ -2,7 +2,7 @@
 Defines the story class that will hold the story data and manage the story's state.
 '''
 import streamlit as st
-from helper_functions import get_data
+from helper_functions import execute_sql
 #defines story class
 class Story:
     def __init__(self):
@@ -20,15 +20,14 @@ class Story:
             where o.story_name = '{self.story_name}'
             order by o.story_segment_number asc
         """
-        self.segments = get_data(story_segments_query)
-        #self.segments = load_story(self.story_name, self.user_name)
+        self.segments = execute_sql(story_segments_query, returns_results=True)
         number_segments_read_query = f"""
             select max(story_segment_number) as num_segments_read
             from educational_technology.mvp_project.rewritten_story_segments
             where story_name = '{self.story_name}'
                 and user_name = '{self.user_name}'
         """
-        number_segments_read = get_data(number_segments_read_query)
+        number_segments_read = execute_sql(number_segments_read_query, returns_results=True)
         if number_segments_read.empty:
             self.num_segments_displayed = number_segments_read[0][0]
         else:
