@@ -25,7 +25,11 @@ if "story" not in st.session_state:
 
 # Display segments
 for index, row in st.session_state.story.story_segments.iterrows():
+    if play_this: # or (st.session_state.auto_play and index == st.session_state.story.num_segments_displayed-1):
+        play_audio(row['STORY_SEGMENT_TEXT'])
     show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
+    play_this = st.button(play_icon)
+
     #if index < st.session_state.story.num_segments_displayed:
         #st.write(index+1)
         #st.write(row['STORY_SEGMENT_TEXT'])
@@ -35,12 +39,8 @@ for index, row in st.session_state.story.story_segments.iterrows():
         #if play_this or (st.session_state.auto_play and index == st.session_state.story.num_segments_displayed-1):
         #    play_audio(row['STORY_SEGMENT_TEXT'])
 
-'''
-if st.session_state.story.num_segments_displayed < st.session_state.story.total_number_of_segments:
-    st.button("Continue", on_click=on_click_continue)
-else:
-    st.title("The End")
-'''
+st.button("Continue", on_click=on_click_continue)
+
 word_to_lookup = st.text_input("Dictionary :thinking_face:", max_chars=20)
 st.button("Search", on_click=on_click_dictionary_lookup(word_to_lookup))
 definition_text = st.text(st.session_state.definition)
