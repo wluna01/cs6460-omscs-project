@@ -200,8 +200,11 @@ def update_vocabulary_model() -> None:
     # sets the latest segment read to the row in the story segments dataframe with the highest story_segment_number
     latest_segment = st.session_state.story.story_segments.loc[st.session_state.story.story_segments['STORY_SEGMENT_NUMBER'].idxmax()]['STORY_SEGMENT_TEXT']
     words = latest_segment.split()
-    for word in words:
-        if already_in_flashcards(word) == True:
-            add_successful_review(word)
-        else:
-            add_flashcard(word, longterm_memory=True)
+    cte_values = ", ".join(f"('{word}')" for word in words)
+    sql = get_sql("sql_queries/update_vocabulary_model.sql", user_name=st.session_state.user_name, cte_values=cte_values)
+    print(sql)
+    #for word in words:
+    #    if already_in_flashcards(word) == True:
+    #        add_successful_review(word)
+    #    else:
+    #        add_flashcard(word, longterm_memory=True)
