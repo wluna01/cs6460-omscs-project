@@ -193,3 +193,15 @@ def get_story_segments(user_name: str, story_name: str) -> pd.DataFrame:
     # get all segments read thus far
     story_segments = get_read_segments(user_name, story_name)
     return story_segments
+
+def update_vocabulary_model() -> None:
+    """Updates the flashcard list with all words from the most recently read segment
+    """
+    # sets the latest segment read to the row in the story segments dataframe with the highest story_segment_number
+    latest_segment = st.session_state.story.story_segments.loc[st.session_state.story.story_segments['STORY_SEGMENT_NUMBER'].idxmax()]['STORY_SEGMENT_TEXT']
+    words = latest_segment.split()
+    for word in words:
+        if already_in_flashcards(word) == True:
+            add_successful_review(word)
+        else:
+            add_flashcard(word, longterm_memory=True)
