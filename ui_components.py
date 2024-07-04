@@ -1,8 +1,11 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
 def show_sidebar():
     with st.sidebar:
         st.title("Settings")
+        auto_play = st.toggle("Auto Play Audio", value=False) # off by default
+        st.session_state.auto_play = auto_play
         with st.expander("Diagnostics"):
             st.text("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
             st.text("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
@@ -11,9 +14,6 @@ def show_sidebar():
                 st.dataframe(st.session_state.review_word)
             st.write("All Segments:")
             st.dataframe(st.session_state.story.segments)
-
-import streamlit as st
-import streamlit.components.v1 as components
 
 # Function to generate HTML and JavaScript for word interaction
 def generate_text_with_js(text):
