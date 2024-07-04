@@ -2,8 +2,8 @@
 Defines the story class that will hold the story data and manage the story's state.
 '''
 import streamlit as st
-from helper_functions import execute_sql
-#defines story class
+from helper_functions import execute_sql, get_story_segments
+
 class Story:
     """
     A class to represent a story, managing its segments and state for a user.
@@ -15,9 +15,13 @@ class Story:
         num_segments_displayed (int): Number of segments read by the user.
         total_number_of_segments (int): Total number of segments in the story.
     """
+
     def __init__(self):
-        self.story_name = st.session_state.story_name
-        self.user_name = st.session_state.user_name
+        #self.story_name = st.session_state.story_name
+        #self.user_name = st.session_state.user_name
+
+        self.story_segments = get_story_segments(st.session_state.user_name, st.session_state.story_name)
+        '''
         story_segments_query = f"""
             select
                 o.story_segment_number,
@@ -43,3 +47,4 @@ class Story:
         else:
             self.num_segments_displayed = 1
         self.total_number_of_segments = len(self.segments)
+        '''
