@@ -19,7 +19,7 @@ def on_click_dictionary_lookup(word):
         source_language = "es"
         target_language = "en"
         query = f"""select snowflake.cortex.translate('{word}', '{source_language}', '{target_language}') as translation"""
-        translation = execute_sql(query)
+        translation = execute_sql(query, returns_results=True)
         add_flashcard(word)
         st.session_state.definition = translation.iat[0, 0]
     else:

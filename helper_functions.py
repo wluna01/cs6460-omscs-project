@@ -26,6 +26,21 @@ def get_credentials():
         snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
     return snowflake_user, snowflake_password, snowflake_account
 
+def get_sql(template_file: str, **kwargs) -> str:
+    """Reads the SQL query template from the specified file and formats it with the provided arguments.
+
+    Args:
+        template_file (str): The name of the file containing the SQL query template.
+        **kwargs: Arbitrary keyword arguments to format the query template.
+
+    Returns:
+        str: The formatted SQL query.
+    """
+    with open(template_file, 'r') as file:
+        query_template = file.read()
+    
+    return query_template.format(**kwargs)
+
 def execute_sql(query, returns_results=False):
     """Executes a SQL query on Snowflake with option to returns the results as a pandas DataFrame.
 
@@ -56,25 +71,13 @@ def execute_sql(query, returns_results=False):
     if returns_results:
         return df
 
-
 def add_flashcard(word):
+    
     current_time = datetime.now()
     next_review = current_time + timedelta(minutes=1)
-    # if the word is already in the table, resets the review time
     user_name = str(st.session_state.user_name)
-    sql = f"""
-        MERGE INTO educational_technology.mvp_project.flashcards as t 
-        USING (select '{user_name}' as user_name, '{word}' as word, 0 as num_consecutive_successful_reviews, '{current_time}' as last_reviewed_at_utc, '{next_review}' as next_review_scheduled_at_utc) as s
-        ON t.word = s.word AND t.user_name = s.user_name
-        WHEN MATCHED THEN
-            UPDATE SET
-                t.num_consecutive_successful_reviews = s.num_consecutive_successful_reviews,
-                t.last_reviewed_at_utc = s.last_reviewed_at_utc,
-                t.next_review_scheduled_at_utc = s.next_review_scheduled_at_utc
-        WHEN NOT MATCHED THEN
-            INSERT (user_name, word, num_consecutive_successful_reviews, last_reviewed_at_utc, next_review_scheduled_at_utc)
-            VALUES (s.user_name, s.word, s.num_consecutive_successful_reviews, s.last_reviewed_at_utc, s.next_review_scheduled_at_utc)
-    """
+
+    sql = get_sql("sql_queries/add_flashcard.sql", user_name=user_name, word=word, current_time=current_time, next_review=next_review)
     execute_sql(sql)
 
 def get_review_word():
