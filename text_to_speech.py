@@ -7,8 +7,9 @@ def text_to_speech(text: str, lang="es") -> None:
     tts = gTTS(text, lang=lang)
     tts.save("output.mp3")
 
+@st.experimental_fragment
 def play_audio(text: str) -> None:
     text_to_speech(text)
     audio_bytes = open("output.mp3", "rb").read()
     st.audio(audio_bytes, format="audio/mp3", autoplay=True)
-    os.remove("output.mp3")
+    #os.remove("output.mp3") probably content to let subsequent plays overwrite the file

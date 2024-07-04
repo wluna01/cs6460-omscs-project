@@ -1,5 +1,18 @@
 import streamlit as st
 import streamlit.components.v1 as components
+from ui_functions import on_click_dictionary_lookup, convert_to_title
+from text_to_speech import play_audio
+
+def show_title():
+    st.title(convert_to_title(st.session_state.story_name))
+ 
+def show_segments():
+    play_icon = "▶️"
+    for index, row in st.session_state.story.story_segments.iterrows():
+        play_this = st.button(play_icon)
+        show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
+        if play_this:
+            play_audio(row['STORY_SEGMENT_TEXT'])
 
 def show_sidebar():
     with st.sidebar:
@@ -13,6 +26,11 @@ def show_sidebar():
                 st.dataframe(st.session_state.review_word)
             st.write("All Segments:")
             st.dataframe(st.session_state.story.segments)
+
+def show_dictionary():
+    word_to_lookup = st.text_input("Dictionary :thinking_face:", max_chars=20)
+    st.button("Search", on_click=on_click_dictionary_lookup(word_to_lookup))
+    definition_text = st.text(st.session_state.definition)
 
 # Function to generate HTML and JavaScript for word interaction
 def generate_text_with_js(text):
