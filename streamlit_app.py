@@ -6,7 +6,7 @@ import nltk
 from ui_functions import on_click_continue, on_click_dictionary_lookup
 from helper_functions import generate_identifier
 from story import Story
-from ui_components import show_sidebar, show_highlightable_passage, show_dictionary, show_segments, show_title
+from ui_components import show_sidebar, show_highlightable_passage, show_dictionary, show_segments, show_title, show_continue
 
 st.session_state.story_name = st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
 if "user_name" not in st.session_state:
@@ -23,6 +23,6 @@ st.session_state.story = Story()
 
 show_segments()
 
-st.button("Continue", on_click=on_click_continue)
+show_continue()
 
 show_dictionary()

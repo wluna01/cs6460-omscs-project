@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
-from ui_functions import on_click_dictionary_lookup, convert_to_title
+from ui_functions import on_click_dictionary_lookup, convert_to_title, on_click_continue
 from text_to_speech import play_audio
 
 def show_title():
@@ -13,6 +13,9 @@ def show_segments():
         show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
         if play_this:
             play_audio(row['STORY_SEGMENT_TEXT'])
+
+def show_continue():
+    st.button("Continue", on_click=on_click_continue)
 
 def show_sidebar():
     with st.sidebar:
