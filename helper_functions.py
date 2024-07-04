@@ -116,3 +116,80 @@ def generate_identifier() -> str:
     animal = random.choice(animals)
 
     return f"{color}{animal}"
+
+def story_available(story_name: str) -> bool:
+    """Checks if a story is available in the stories table.
+
+    Args:
+        story_name (str): The name of the story to check.
+
+    Returns:
+        bool: True if the story is available, False otherwise.
+    """
+    sql = get_sql("sql_queries/story_available.sql", story_name=story_name)
+    story = execute_sql(sql, returns_results=True)
+    return not story.empty
+
+def user_started_story(user_name: str, story_name: str) -> bool:
+    """Checks if a user has started reading a story.
+
+    Args:
+        user_name (str): The name of the user.
+        story_name (str): The name of the story.
+
+    Returns:
+        bool: True if the user has started reading the story, False otherwise.
+    """
+    sql = get_sql("sql_queries/user_started_story.sql", user_name=user_name, story_name=story_name)
+    user_story = execute_sql(sql, returns_results=True)
+    return not user_story.empty
+
+def start_story(user_name: str, story_name: str) -> None:
+    """Writes the first original segment of a story to the user stories table.
+
+    Args:
+        user_name (str): The name of the user.
+        story_name (str): The name of the story.
+    """
+    sql = get_sql("sql_queries/get_first_story_segment.sql", story_name=story_name)
+    first_story_segment_df = execute_sql(sql, returns_results=True)
+    first_story_segment = first_story_segment_df.iat[0,0]
+    sql = get_sql("sql_queries/insert_user_story_segment.sql", user_name=user_name, story_name=story_name, story_segment_number=1, story_segment_text=first_story_segment)
+    execute_sql(sql)
+
+def get_read_segments(user_name: str, story_name: str) -> pd.DataFrame:
+    """Fetches the story read thus far for a given user and story name.
+
+    Args:
+        user_name (str): The name of the user.
+        story_name (str): The name of the story.
+    
+    Returns:
+        story_segments (pd.DataFrame) A DataFrame containing the story segments read by the user.
+    """
+    sql = get_sql("sql_queries/get_read_user_story_segments.sql", user_name=user_name, story_name=story_name)
+    story_segments = execute_sql(sql, returns_results=True)
+    return story_segments
+
+def get_story_segments(user_name: str, story_name: str) -> pd.DataFrame:
+    """Fetches the story read thus far for a given user and story name.
+
+    Args:
+        user_name (str): The name of the user.
+        story_name (str): The name of the story.
+    
+    Returns:
+        story_segments (pd.DataFrame) A DataFrame containing the story segments read by the user.
+    """
+
+    if story_available(story_name) == False:
+        raise Exception(f"Story '{story_name}' is not available.")
+    
+    # if the user has not started reading the story
+    if user_started_story(user_name, story_name) == False:
+        # write the first original segment to the user stories table
+        start_story(user_name, story_name)
+
+    # get all segments read thus far
+    story_segments = get_read_segments(user_name, story_name)
+    return story_segments

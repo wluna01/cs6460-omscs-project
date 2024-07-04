@@ -24,3 +24,9 @@ def on_click_dictionary_lookup(word):
         st.session_state.definition = translation.iat[0, 0]
     else:
         st.session_state.definition = ""
+
+def convert_to_title(text):
+    """Converts a variable name to a title format.
+    Replaces underscores with spaces and capitalizes the first letter of each word.
+    """
+    return text.replace("_", " ").title()
