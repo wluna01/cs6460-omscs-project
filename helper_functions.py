@@ -71,8 +71,14 @@ def execute_sql(query, returns_results=False):
     if returns_results:
         return df
 
-def add_flashcard(word):
+def add_flashcard(word: str) -> None:
+    """Adds a flashcard to the flashcards table.
     
+    If the word already exists, it will reset its study progress.
+
+    Args:
+        word (str): The word to be inserted or updated.
+    """
     current_time = datetime.now()
     next_review = current_time + timedelta(minutes=1)
     user_name = str(st.session_state.user_name)
@@ -80,17 +86,29 @@ def add_flashcard(word):
     sql = get_sql("sql_queries/add_flashcard.sql", user_name=user_name, word=word, current_time=current_time, next_review=next_review)
     execute_sql(sql)
 
-def get_review_word():
+def get_review_word() -> None:
+    """Fetches a word for review from the flashcards table and stores it in the session state.
+    
+    The function retrieves a word that is due for review for the current user and stores it in the session state.
+    """
     user_name = str(st.session_state.user_name)
-    sql = f"""select word from educational_technology.mvp_project.flashcards where user_name = '{user_name}' order by next_review_scheduled_at_utc desc"""
-    review_word = execute_sql(sql)
+    sql = get_sql("sql_queries/get_review_word.sql", user_name=user_name)
+    review_word = execute_sql(sql, returns_results=True)
     st.session_state.review_word = review_word
     #if review_word.empty == False:
     #    return review_word.iat[0,0]
     #else:
     #    return None
 
-def generate_identifier():
+def generate_identifier() -> str:
+    """Generates a unique identifier consisting of a random color and animal.
+    
+    The function randomly selects a color from a predefined list of colors and an animal
+    from a predefined list of animals, and combines them to create a unique identifier.
+    
+    Returns:
+        str: A unique identifier in the format "ColorAnimal".
+    """
     colors = ["Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Black", "White", "Grey"]
     animals = ["Lion", "Tiger", "Bear", "Kangaroo", "Eagle", "Falcon", "Wolf", "Fox", "Rabbit"]
 
