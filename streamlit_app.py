@@ -21,7 +21,7 @@ play_icon = "▶️"
 if "story" not in st.session_state:
     st.session_state.story = Story()
 
-show_sidebar()
+#show_sidebar()
 
 # Display segments
 for index, row in st.session_state.story.story_segments.iterrows():

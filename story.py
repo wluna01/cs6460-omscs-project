@@ -21,6 +21,7 @@ class Story:
         #self.user_name = st.session_state.user_name
 
         self.story_segments = get_story_segments(st.session_state.user_name, st.session_state.story_name)
+        self.num_segments_displayed = 1 # placeholder
         '''
         story_segments_query = f"""
             select

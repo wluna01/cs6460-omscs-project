@@ -166,7 +166,7 @@ def get_read_segments(user_name: str, story_name: str) -> pd.DataFrame:
     Returns:
         story_segments (pd.DataFrame) A DataFrame containing the story segments read by the user.
     """
-    sql = get_sql("sql_queries/get_read_story_segments.sql", user_name=user_name, story_name=story_name)
+    sql = get_sql("sql_queries/get_read_user_story_segments.sql", user_name=user_name, story_name=story_name)
     story_segments = execute_sql(sql, returns_results=True)
     return story_segments
 

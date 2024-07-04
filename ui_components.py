@@ -7,8 +7,7 @@ def show_sidebar():
         auto_play = st.toggle("Auto Play Audio", value=False) # off by default
         st.session_state.auto_play = auto_play
         with st.expander("Diagnostics"):
-            st.text("# Segments Displayed: " + str(st.session_state.story.num_segments_displayed))
-            st.text("# Total Segments: " + str(st.session_state.story.total_number_of_segments))
+            st.text("# Segments Read: " + str(st.session_state.story.num_segments_displayed))
             if "review_word" in st.session_state:
                 st.write("Review DF is: ")
                 st.dataframe(st.session_state.review_word)
