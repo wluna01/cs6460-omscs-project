@@ -3,7 +3,7 @@ USING (
     SELECT DISTINCT column1 AS word
     FROM (VALUES {cte_values})
 ) AS s
-    ON t.word = s.word AND t.user_name = {user_name}
+    ON t.word = s.word AND t.user_name = '{user_name}'
 WHEN MATCHED THEN
     UPDATE SET
         t.num_consecutive_successful_reviews = t.num_consecutive_successful_reviews + 1,
