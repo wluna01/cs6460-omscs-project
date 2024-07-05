@@ -6,15 +6,22 @@ from text_to_speech import play_audio
 
 def show_title():
     st.title(convert_to_title(st.session_state.story_name))
- 
+
+#@st.experimental_fragment
+def show_annotated_passage(text):
+    annotations = text_highlighter(text)
+    #st.write(annotations)
+    if annotations is not None:
+        unknown_words = [annotation["label"] for annotation in annotations[0]]
+        if len(unknown_words) > 0:
+            formatted_unknown_words = ', '.join(unknown_words)
+            st.write("unknown words: " + formatted_unknown_words)
+
 def show_segments():
     play_icon = "▶️"
     for index, row in st.session_state.story.story_segments.iterrows():
         play_this = st.button(play_icon)
-        annotations = text_highlighter(row['STORY_SEGMENT_TEXT'])
-        if annotations is not None:
-            #for annotation in annotations[0]:
-            st.write(str(annotation["label"] + " ") for annotation in annotations[0])
+        show_annotated_passage(row['STORY_SEGMENT_TEXT'])
         #show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
         if play_this:
             play_audio(row['STORY_SEGMENT_TEXT'])

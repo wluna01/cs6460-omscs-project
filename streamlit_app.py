@@ -25,4 +25,4 @@ show_segments()
 
 show_continue()
 
-show_dictionary()
+#show_dictionary()
