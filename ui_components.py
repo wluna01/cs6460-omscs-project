@@ -63,4 +63,4 @@ def generate_text_with_js(text):
 # Function to display a highlightable passage
 def show_highlightable_passage(text):
     html_content = generate_text_with_js(text)
-    components.html(html_content, height=200)
+    components.html(html_content, height=100)
