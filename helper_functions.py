@@ -5,6 +5,8 @@ from snowflake.connector.pandas_tools import pd_writer
 from datetime import datetime, timedelta 
 import random
 import pandas as pd
+import stanza
+stanza.download('es')
 
 def get_credentials():
     """Fetches Snowflake credentials for database authentication.
@@ -194,12 +196,20 @@ def get_story_segments(user_name: str, story_name: str) -> pd.DataFrame:
     story_segments = get_read_segments(user_name, story_name)
     return story_segments
 
+#def lemmatize_word_list(words: list) -> list:
+#    return list(set(spanish_lemmas.get(word, word) for word in words))
+
 def update_vocabulary_model() -> None:
     """Updates the flashcard list with all words from the most recently read segment
     """
     # sets the latest segment read to the row in the story segments dataframe with the highest story_segment_number
     latest_segment = st.session_state.story.story_segments.loc[st.session_state.story.story_segments['STORY_SEGMENT_NUMBER'].idxmax()]['STORY_SEGMENT_TEXT']
-    words = latest_segment.split()
-    cte_values = ", ".join(f"('{word}')" for word in words)
+
+    #lemmatizer
+    nlp = stanza.Pipeline('es')
+    doc = nlp(latest_segment)
+    lemmas = list({word.lemma for sentence in doc.sentences for word in sentence.words if len(word.lemma) > 2})
+    #prepares lemmas for SQL
+    cte_values = ", ".join(f"('{lemma}')" for lemma in lemmas)
     sql = get_sql("sql_queries/merge_vocabulary_model.sql", user_name=st.session_state.user_name, cte_values=cte_values)
     execute_sql(sql)
