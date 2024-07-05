@@ -13,7 +13,8 @@ def on_click_continue():
         #query = f"""select snowflake.cortex.complete('llama3-70b', '{prompt}')"""
         #response = execute_sql(query)
     #if there are no reviews to incorporate, just display the next segment
-    st.session_state.story.num_segments_displayed += 1
+    # - ACTUALLY NEED THIS
+    #st.session_state.story.num_segments_displayed += 1
 
 def on_click_dictionary_lookup(word):
     if word:
