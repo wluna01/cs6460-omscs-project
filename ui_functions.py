@@ -1,9 +1,10 @@
-from helper_functions import execute_sql, add_flashcard, get_review_word
+from helper_functions import execute_sql, add_flashcard, get_review_word, update_vocabulary_model
 import streamlit as st
 
 def on_click_continue():
     #get the next flashcard to study
-    get_review_word()
+    #get_review_word()
+    update_vocabulary_model()
     #if this user has a flashcard
     #if st.session_state.review_word is not None:
     #    st.session_state.review_word = review_word
@@ -12,7 +13,8 @@ def on_click_continue():
         #query = f"""select snowflake.cortex.complete('llama3-70b', '{prompt}')"""
         #response = execute_sql(query)
     #if there are no reviews to incorporate, just display the next segment
-    st.session_state.story.num_segments_displayed += 1
+    # - ACTUALLY NEED THIS
+    #st.session_state.story.num_segments_displayed += 1
 
 def on_click_dictionary_lookup(word):
     if word:
