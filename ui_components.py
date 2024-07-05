@@ -1,5 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
+from streamlit_annotation_tools import text_highlighter
 from ui_functions import on_click_dictionary_lookup, convert_to_title, on_click_continue
 from text_to_speech import play_audio
 
@@ -10,7 +11,11 @@ def show_segments():
     play_icon = "▶️"
     for index, row in st.session_state.story.story_segments.iterrows():
         play_this = st.button(play_icon)
-        show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
+        annotations = text_highlighter(row['STORY_SEGMENT_TEXT'])
+        if annotations is not None:
+            #for annotation in annotations[0]:
+            st.write(str(annotation["label"] + " ") for annotation in annotations[0])
+        #show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
         if play_this:
             play_audio(row['STORY_SEGMENT_TEXT'])
 
