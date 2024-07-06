@@ -2,7 +2,7 @@
 Defines the story class that will hold the story data and manage the story's state.
 '''
 import streamlit as st
-from helper_functions import execute_sql, get_story_segments
+from helper_functions import get_story_segments
 
 class Story:
     """
