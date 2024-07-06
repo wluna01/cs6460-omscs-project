@@ -196,9 +196,6 @@ def get_story_segments(user_name: str, story_name: str) -> pd.DataFrame:
     story_segments = get_read_segments(user_name, story_name)
     return story_segments
 
-#def lemmatize_word_list(words: list) -> list:
-#    return list(set(spanish_lemmas.get(word, word) for word in words))
-
 def update_vocabulary_model() -> None:
     """Updates the flashcard list with all words from the most recently read segment
     """

@@ -4,7 +4,14 @@ from helper_functions import add_flashcard
 import stanza
 stanza.download('es')
 
-def get_response(word : str) -> str:
+def get_response(word : str) -> list:
+    """Retrieves the English translation of a Spanish word
+        from the Merriam-Webster Spanish-English dictionary API.
+    
+    Args: a word in Spanish
+
+    Returns: a list of English definitions
+    """
     api_key = os.getenv("MERRIAM_WEBSTER_API_KEY")
     url = f"https://www.dictionaryapi.com/api/v3/references/spanish/json/{word}?key={api_key}"
     response = requests.get(url).json()
@@ -14,7 +21,13 @@ def get_response(word : str) -> str:
     except:
         return None
 
-def get_lemma(word):
+def get_lemma(word : str) -> str:
+    """Gets the lemma of a Spanish word using the stanza library.
+
+    Args: a word in Spanish
+
+    Returns: the lemma of the same word
+    """
     nlp = stanza.Pipeline('es')
     doc = nlp(word)
     lemma = doc.sentences[0].words[0].lemma
