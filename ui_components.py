@@ -3,6 +3,7 @@ import streamlit.components.v1 as components
 from streamlit_annotation_tools import text_highlighter
 from ui_functions import on_click_dictionary_lookup, convert_to_title, on_click_continue
 from text_to_speech import play_audio
+from dictionary_functions import get_definition
 
 def show_title():
     st.title(convert_to_title(st.session_state.story_name))
@@ -29,9 +30,9 @@ def show_segments():
         unknown_words = show_annotated_passage(row['STORY_SEGMENT_TEXT'])
         
         if unknown_words:
-            for num, word in enumerate(unknown_words):
+            for word in unknown_words:
                 st.subheader(str(word))
-                st.text("placeholder definition")
+                st.text(get_definition(word))
         #show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
         if play_this:
             play_audio(row['STORY_SEGMENT_TEXT'])
