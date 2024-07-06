@@ -40,13 +40,8 @@ def show_segments():
         # make annotations and audio available for the last section only
         if index == st.session_state.story.num_segments_displayed - 1:
 
-            unknown_words = show_annotated_passage(row['STORY_SEGMENT_TEXT'])
+            st.session_state.unknown_words = show_annotated_passage(row['STORY_SEGMENT_TEXT'])
         
-            if unknown_words:
-                for word in unknown_words:
-                    st.subheader(str(word))
-                    st.text(get_definition(word))
-            
             play_icon = "▶️"
             play_this = st.button(play_icon + ' Play Audio')
             if play_this:
@@ -61,42 +56,11 @@ def show_continue():
 
 def show_sidebar():
     with st.sidebar:
+        if "unknown_words" in st.session_state:
+            for word in st.session_state.unknown_words:
+                st.subheader(str(word))
+                st.text(get_definition(word))
         st.title("Settings")
         define_user_info()
         #auto_play = st.toggle("Auto Play Audio", value=False) # off by default
         #st.session_state.auto_play = auto_play
-
-def show_dictionary():
-    word_to_lookup = st.text_input("Dictionary :thinking_face:", max_chars=20)
-    st.button("Search", on_click=on_click_dictionary_lookup(word_to_lookup))
-    definition_text = st.text(st.session_state.definition)
-
-# Function to generate HTML and JavaScript for word interaction
-def generate_text_with_js(text):
-    words = text.split()
-    html_words = ' '.join([f'<span class="hoverable">{word}</span>' for word in words])
-    custom_html = f"""
-    <html>
-    <head>
-        <style>
-            .hoverable {{
-                cursor: pointer;
-                display: inline-block;
-                color: black;
-            }}
-            .hoverable:hover {{
-                background-color: yellow;
-            }}
-        </style>
-    </head>
-    <body>
-        <div>{html_words}</div>
-    </body>
-    </html>
-    """
-    return custom_html
-
-# Function to display a highlightable passage
-def show_highlightable_passage(text):
-    html_content = generate_text_with_js(text)
-    components.html(html_content, height=100)
