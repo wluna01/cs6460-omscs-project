@@ -3,25 +3,36 @@ import streamlit.components.v1 as components
 from streamlit_annotation_tools import text_highlighter
 from ui_functions import on_click_dictionary_lookup, convert_to_title, on_click_continue
 from text_to_speech import play_audio
+from dictionary_functions import get_definition
 
 def show_title():
     st.title(convert_to_title(st.session_state.story_name))
 
 #@st.experimental_fragment
-def show_annotated_passage(text):
+def show_annotated_passage(text : str) -> list:
+    """Displays a passage of text with words that can be clicked on to get definitions.
+    Args: String of text to display
+    Returns: If any words are clicked, a list of the clicked words is returned.
+        Otherwise an empty list is returned
+    """
     annotations = text_highlighter(text)
     #st.write(annotations)
     if annotations is not None:
-        unknown_words = [annotation["label"] for annotation in annotations[0]]
-        if len(unknown_words) > 0:
-            formatted_unknown_words = ', '.join(unknown_words)
-            st.write("unknown words: " + formatted_unknown_words)
+        clicked_words = [annotation["label"] for annotation in annotations[0]]
+        if len(clicked_words) > 0:
+            return clicked_words
+    return []
 
 def show_segments():
     play_icon = "▶️"
     for index, row in st.session_state.story.story_segments.iterrows():
         play_this = st.button(play_icon)
-        show_annotated_passage(row['STORY_SEGMENT_TEXT'])
+        unknown_words = show_annotated_passage(row['STORY_SEGMENT_TEXT'])
+        
+        if unknown_words:
+            for word in unknown_words:
+                st.subheader(str(word))
+                st.text(get_definition(word))
         #show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
         if play_this:
             play_audio(row['STORY_SEGMENT_TEXT'])
