@@ -1,3 +1,7 @@
+/*
+Generates the next segment of the story with an LLM, 
+providing both known and unknown words as guidance.
+*/
 MERGE INTO educational_technology.mvp_project.user_story_segments AS t
 USING(
     with
