@@ -91,7 +91,7 @@ USING(
         AND t.story_segment_number = s.story_segment_number
 WHEN MATCHED THEN
     UPDATE SET
-        t.story_segment_text = s.story_segment_text,
+        t.story_segment_text = s.story_segment_text
 WHEN NOT MATCHED THEN
     INSERT (
         user_name,
