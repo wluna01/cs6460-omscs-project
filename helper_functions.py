@@ -212,9 +212,13 @@ def update_vocabulary_model() -> None:
     execute_sql(sql)
 
 def add_story_segment() -> None:
+    query = get_sql(
+        "sql_queries/next_story_segment_query.sql",
+        user_name=st.session_state.user_name,
+        story_name=st.session_state.story_name
+    )
     sql = get_sql(
         "sql_queries/generate_next_story_segment.sql",
-        user_name=st.session_state.user_name,
-        story_name=st.session_state.story_name,
+        query=query
     )
     execute_sql(sql)
