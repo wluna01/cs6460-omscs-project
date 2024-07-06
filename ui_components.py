@@ -8,11 +8,11 @@ from dictionary_functions import get_definition
 from story import Story
 
 def define_user_info():
-    st.session_state.story_name = st.text_input(label="Story Name (cannot change during demo)", value="la_tortuga_gigante", max_chars=20)
+    st.session_state.story_name = st.selectbox(label="Story Name", options=["la_tortuga_gigante"])
     if "user_name" not in st.session_state:
-        st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=generate_identifier(), max_chars=20)
+        st.session_state.user_name = st.text_input(label="User Name", value=generate_identifier(), max_chars=20)
     else:
-        st.session_state.user_name = st.text_input(label="User Name (randomly generated during demo. data persists for those already used)", value=st.session_state.user_name, max_chars=20)
+        st.session_state.user_name = st.text_input(label="User Name", value=st.session_state.user_name, max_chars=20)
     st.session_state.story = Story()
 
 def show_title():
@@ -62,15 +62,9 @@ def show_continue():
 def show_sidebar():
     with st.sidebar:
         st.title("Settings")
-        auto_play = st.toggle("Auto Play Audio", value=False) # off by default
-        st.session_state.auto_play = auto_play
-        with st.expander("Diagnostics"):
-            st.text("# Segments Read: " + str(st.session_state.story.num_segments_displayed))
-            if "review_word" in st.session_state:
-                st.write("Review DF is: ")
-                st.dataframe(st.session_state.review_word)
-            st.write("All Segments:")
-            st.dataframe(st.session_state.story.segments)
+        define_user_info()
+        #auto_play = st.toggle("Auto Play Audio", value=False) # off by default
+        #st.session_state.auto_play = auto_play
 
 def show_dictionary():
     word_to_lookup = st.text_input("Dictionary :thinking_face:", max_chars=20)

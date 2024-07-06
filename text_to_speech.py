@@ -1,12 +1,8 @@
 import streamlit as st
-from gtts import gTTS
 import os
 from google.cloud import texttospeech
 # Function to convert text to speech
-def text_to_speech__deprecated(text: str, lang="es") -> None:
-    tts = gTTS(text, lang=lang)
-    tts.save("output.mp3")
-
+@st.experimental_fragment
 def text_to_speech(text, language_code="es-US", voice_name="es-US-Neural2-A", audio_encoding="MP3", output_file="output.mp3"):
 
     api_key = os.getenv("gcp_tts_api_key")
