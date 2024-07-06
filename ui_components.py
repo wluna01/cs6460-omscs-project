@@ -24,18 +24,27 @@ def show_annotated_passage(text : str) -> list:
     return []
 
 def show_segments():
-    play_icon = "▶️"
+
     for index, row in st.session_state.story.story_segments.iterrows():
-        play_this = st.button(play_icon)
-        unknown_words = show_annotated_passage(row['STORY_SEGMENT_TEXT'])
+
+        # make annotations and audio available for the last section only
+        if index == st.session_state.story.num_segments_displayed - 1:
+
+            unknown_words = show_annotated_passage(row['STORY_SEGMENT_TEXT'])
         
-        if unknown_words:
-            for word in unknown_words:
-                st.subheader(str(word))
-                st.text(get_definition(word))
-        #show_highlightable_passage(row['STORY_SEGMENT_TEXT'])
-        if play_this:
-            play_audio(row['STORY_SEGMENT_TEXT'])
+            if unknown_words:
+                for word in unknown_words:
+                    st.subheader(str(word))
+                    st.text(get_definition(word))
+            
+            play_icon = "▶️"
+            play_this = st.button(play_icon + ' Play Audio')
+            if play_this:
+                play_audio(row['STORY_SEGMENT_TEXT'])
+
+        # otherwise just display the text
+        else:
+            st.write(row['STORY_SEGMENT_TEXT'])
 
 def show_continue():
     st.button("Continue", on_click=on_click_continue)

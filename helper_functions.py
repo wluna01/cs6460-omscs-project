@@ -213,3 +213,11 @@ def update_vocabulary_model() -> None:
     cte_values = ", ".join(f"('{lemma}')" for lemma in lemmas)
     sql = get_sql("sql_queries/merge_vocabulary_model.sql", user_name=st.session_state.user_name, cte_values=cte_values)
     execute_sql(sql)
+
+def add_story_segment() -> None:
+    sql = get_sql(
+        "sql_queries/generate_next_story_segment.sql",
+        user_name=st.session_state.user_name,
+        story_name=st.session_state.story_name,
+    )
+    execute_sql(sql)
