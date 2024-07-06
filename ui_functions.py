@@ -1,10 +1,12 @@
-from helper_functions import execute_sql, add_flashcard, get_review_word, update_vocabulary_model
+from helper_functions import execute_sql, add_flashcard, get_review_word, update_vocabulary_model, add_story_segment
 import streamlit as st
 
 def on_click_continue():
     #get the next flashcard to study
     #get_review_word()
     update_vocabulary_model()
+    add_story_segment()
+
     #if this user has a flashcard
     #if st.session_state.review_word is not None:
     #    st.session_state.review_word = review_word
