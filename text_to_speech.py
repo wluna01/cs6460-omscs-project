@@ -3,7 +3,7 @@ import os
 from google.cloud import texttospeech
 # Function to convert text to speech
 @st.experimental_fragment
-def text_to_speech(text, language_code="es-US", voice_name="es-US-Neural2-A", audio_encoding="MP3", output_file="output.mp3"):
+def text_to_speech(text, language_code, voice_name, audio_encoding="MP3", output_file="output.mp3"):
 
     api_key = os.getenv("gcp_tts_api_key")
 
@@ -35,7 +35,12 @@ def text_to_speech(text, language_code="es-US", voice_name="es-US-Neural2-A", au
 
 @st.experimental_fragment
 def play_audio(text: str) -> None:
-    text_to_speech(text)
+    #this if else is a hack to invoke the right language code.
+    #stories should be tagged with their language and fetched in db
+    if st.session_state.story_name == "alice_in_wonderland":
+        text_to_speech(text, language_code="en-US", voice_name="en-US-Neural2-C")
+    else:
+        text_to_speech(text, language_code="es-US", voice_name="es-US-Neural2-A")
     audio_bytes = open("output.mp3", "rb").read()
     st.audio(audio_bytes, format="audio/mp3", autoplay=True)
     #os.remove("output.mp3") probably content to let subsequent plays overwrite the file

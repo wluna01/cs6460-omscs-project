@@ -61,15 +61,15 @@ rewritten as (
         review_word,
         'Please rewrite a story excerpt to fulfill these criteria: ' AS intro_instruction,
         concat(
-            '1. Simplify the excerpt to be easily read by a someone who is reading in their second language. ',
+            '1. Simplify the excerpt to be easily read by someone who is reading in their second language. ',
             'To give you a sense of how much the excerpt needs to be simplified, these words represent the upper limit of the student''s vocabulary: ',
             array_to_string(known_words, ', ')
         ) AS simplification_instruction,
         concat(
-            '2. Include the following word in the excerpt: ',
+            ' 2. Include the following word in the excerpt: ',
             review_word
         ) AS review_instruction,
-        'Do not preface your response in any way, only include the rewritten excerpt. Rewrite the excerpt in the original language of the text. Preserve the narrative in the excerpt. The excerpt is: ' as concluding_instruction,
+        '. Do not preface your response in any way, only include the rewritten excerpt. Please preserve as much of the original language and narrative as possible. The excerpt is: ' as concluding_instruction,
         iff(
             contains(story_segment_text, review_word), -- if review word isn't already in the excerpt
             concat(
