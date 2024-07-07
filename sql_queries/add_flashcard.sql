@@ -1,6 +1,12 @@
 /*
 Query to add a flashcard to the flashcards table.
 If the word already exists, it will reset its study progress.
+
+Arguments:
+    {user_name} - The user's name.
+    {word} - The word to be inserted or updated.
+    {current_time} - The current time in UTC.
+    {next_review} - The scheduled time for the next review in UTC.
 */
 MERGE INTO educational_technology.mvp_project.flashcards AS t
 USING (
