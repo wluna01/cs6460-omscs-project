@@ -203,9 +203,15 @@ def update_vocabulary_model() -> None:
     latest_segment = st.session_state.story.story_segments.loc[st.session_state.story.story_segments['STORY_SEGMENT_NUMBER'].idxmax()]['STORY_SEGMENT_TEXT']
 
     #lemmatizer
-    nlp = stanza.Pipeline('es')
+    if st.session_state.story_name == "alice_in_wonderland":
+        nlp = stanza.Pipeline('en')
+    else:
+        nlp = stanza.Pipeline('es')
     doc = nlp(latest_segment)
-    lemmas = list({word.lemma for sentence in doc.sentences for word in sentence.words if len(word.lemma) > 3})
+    lemmas = list({
+        word.lemma for sentence in doc.sentences for word in sentence.words 
+        if len(word.lemma) > 3 and word.lemma.isalpha()
+    })
     #prepares lemmas for SQL
     cte_values = ", ".join(f"('{lemma}')" for lemma in lemmas)
     sql = get_sql("sql_queries/merge_vocabulary_model.sql", user_name=st.session_state.user_name, cte_values=cte_values)

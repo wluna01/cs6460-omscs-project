@@ -8,7 +8,7 @@ from dictionary_functions import get_definition
 from story import Story
 
 def define_user_info():
-    st.session_state.story_name = st.selectbox(label="Story Name", options=["la_tortuga_gigante", "alice_in_wonderland"])
+    st.session_state.story_name = st.selectbox(label="Story Name", options=["la_sombra_del_viento", "alice_in_wonderland", "la_tortuga_gigante"])
     if "user_name" not in st.session_state:
         st.session_state.user_name = st.text_input(label="User Name", value=generate_identifier(), max_chars=20)
     else:

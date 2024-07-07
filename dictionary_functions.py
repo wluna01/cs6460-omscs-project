@@ -2,15 +2,19 @@ import requests
 import os
 from helper_functions import add_flashcard
 import stanza
+import streamlit as st
 stanza.download('es')
+stanza.download('en')
 
 def get_response(word : str) -> list:
     """Retrieves the English translation of a Spanish word
+        or the Spanish translation of an English word
         from the Merriam-Webster Spanish-English dictionary API.
     
-    Args: a word in Spanish
+    Args: a word in Spanish or English
 
-    Returns: a list of English definitions
+    Returns: a list of English or Spanish definitions.
+        Definitions will be in the language of the word not provided.
     """
     api_key = os.getenv("MERRIAM_WEBSTER_API_KEY")
     url = f"https://www.dictionaryapi.com/api/v3/references/spanish/json/{word}?key={api_key}"
@@ -28,7 +32,10 @@ def get_lemma(word : str) -> str:
 
     Returns: the lemma of the same word
     """
-    nlp = stanza.Pipeline('es')
+    if st.session_state.story_name == "alice_in_wonderland":
+        nlp = stanza.Pipeline('en')
+    else:
+        nlp = stanza.Pipeline('es')
     doc = nlp(word)
     lemma = doc.sentences[0].words[0].lemma
     return lemma
