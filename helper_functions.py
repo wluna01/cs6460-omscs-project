@@ -196,9 +196,6 @@ def get_story_segments(user_name: str, story_name: str) -> pd.DataFrame:
     story_segments = get_read_segments(user_name, story_name)
     return story_segments
 
-#def lemmatize_word_list(words: list) -> list:
-#    return list(set(spanish_lemmas.get(word, word) for word in words))
-
 def update_vocabulary_model() -> None:
     """Updates the flashcard list with all words from the most recently read segment
     """
@@ -215,9 +212,13 @@ def update_vocabulary_model() -> None:
     execute_sql(sql)
 
 def add_story_segment() -> None:
+    query = get_sql(
+        "sql_queries/next_story_segment_query.sql",
+        user_name=st.session_state.user_name,
+        story_name=st.session_state.story_name
+    )
     sql = get_sql(
         "sql_queries/generate_next_story_segment.sql",
-        user_name=st.session_state.user_name,
-        story_name=st.session_state.story_name,
+        query=query
     )
     execute_sql(sql)

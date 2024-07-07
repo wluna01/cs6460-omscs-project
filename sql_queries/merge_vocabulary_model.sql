@@ -1,3 +1,6 @@
+/*
+Adds each word read in the current passage as a burned flashcard in the user's vocabulary model.
+*/
 MERGE INTO educational_technology.mvp_project.flashcards AS t
 USING (
     SELECT DISTINCT column1 AS word
