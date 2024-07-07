@@ -1,7 +1,6 @@
 import streamlit as st
-import streamlit.components.v1 as components
 from streamlit_annotation_tools import text_highlighter
-from ui_functions import on_click_dictionary_lookup, convert_to_title, on_click_continue
+from ui_functions import convert_to_title, on_click_continue
 from helper_functions import generate_identifier
 from text_to_speech import play_audio
 from dictionary_functions import get_definition
