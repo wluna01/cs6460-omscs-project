@@ -17,7 +17,7 @@ def define_user_info():
 
 def show_title():
     st.title(convert_to_title(st.session_state.story_name))
-    st.subheader("Double click on any word to get its definition and add it to your vocabulary list.")
+    st.text("Double click a word to see its definition and add it to your vocabulary list.")
 
 def show_annotated_passage(text : str):
     """Displays a passage of text with words that can be clicked on to get definitions.
@@ -44,7 +44,7 @@ def show_segments():
         
             play_icon = "▶️"
             play_this = st.button(play_icon + ' Play Audio')
-            if play_this:
+            if play_this or st.session_state.auto_play:
                 play_audio(row['STORY_SEGMENT_TEXT'])
 
         # otherwise just display the text
@@ -58,8 +58,8 @@ def show_settings():
     with st.sidebar:
         st.title("Settings")
         define_user_info()
-        #auto_play = st.toggle("Auto Play Audio", value=False) # off by default
-        #st.session_state.auto_play = auto_play
+        auto_play = st.toggle("Auto Play Audio", value=False)
+        st.session_state.auto_play = auto_play
 
 def show_dictionary():
     with st.sidebar:

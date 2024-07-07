@@ -205,7 +205,7 @@ def update_vocabulary_model() -> None:
     #lemmatizer
     nlp = stanza.Pipeline('es')
     doc = nlp(latest_segment)
-    lemmas = list({word.lemma for sentence in doc.sentences for word in sentence.words if len(word.lemma) > 2})
+    lemmas = list({word.lemma for sentence in doc.sentences for word in sentence.words if len(word.lemma) > 3})
     #prepares lemmas for SQL
     cte_values = ", ".join(f"('{lemma}')" for lemma in lemmas)
     sql = get_sql("sql_queries/merge_vocabulary_model.sql", user_name=st.session_state.user_name, cte_values=cte_values)
