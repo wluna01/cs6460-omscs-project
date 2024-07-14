@@ -1,6 +1,9 @@
-altair
-pandas
-streamlit
-nltk
-snowflake
-gtts
+pandas==1.5.3
+protobuf==5.27.2
+Requests==2.32.3
+snowflake_connector_python==3.11.0
+snowflake_snowpark_python==1.19.0
+stanza==1.8.2
+streamlit==1.36.0
+streamlit_annotation_tools==1.0.1
+google-cloud-texttospeech==2.16.3
