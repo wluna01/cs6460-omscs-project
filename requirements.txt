@@ -1,5 +1,5 @@
-pandas==2.1.1
-numpy==1.24.3
+pandas==1.4.3
+numpy==1.22.4
 #protobuf==5.27.2
 Requests==2.32.3
 snowflake_connector_python==3.11.0
