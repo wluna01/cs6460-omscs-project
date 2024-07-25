@@ -196,6 +196,8 @@ def update_vocabulary_model() -> None:
     # sets the latest segment read to the row in the story segments dataframe with the highest story_segment_number
     latest_segment = st.session_state.story.story_segments.loc[st.session_state.story.story_segments['STORY_SEGMENT_NUMBER'].idxmax()]['STORY_SEGMENT_TEXT']
 
+    #removing lemmatizer until performance issues are resolved
+    '''
     #lemmatizer
     if st.session_state.story_name == "alice_in_wonderland":
         nlp = stanza.Pipeline('en')
@@ -206,8 +208,11 @@ def update_vocabulary_model() -> None:
         word.lemma for sentence in doc.sentences for word in sentence.words 
         if len(word.lemma) > 3 and word.lemma.isalpha()
     })
-    #prepares lemmas for SQL
     cte_values = ", ".join(f"('{lemma}')" for lemma in lemmas)
+    '''
+    words = [word for word in latest_segment.split() if len(word) > 3 and word.isalpha]
+    #prepares lemmas for SQL
+    cte_values = ", ".join(f"('{word}')" for word in words)
     sql = get_sql("sql_queries/merge_vocabulary_model.sql", user_name=st.session_state.user_name, cte_values=cte_values)
     execute_sql(sql)
 
