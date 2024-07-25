@@ -6,7 +6,7 @@ import streamlit as st
 stanza.download('es')
 stanza.download('en')
 
-def get_merriam_webster_credentials():
+def get_merriam_webster_credentials() -> str:
     """Fetches Merriam-Webster credentials for dictionary API authentication.
     Secrets available locally and via Streamlit Cloud.
 
@@ -60,6 +60,13 @@ def get_definition(word):
     """
     definition = get_response(word)
 
+    if definition:
+        add_flashcard(word)
+        return definition
+    else:
+        return "No definition found."
+    
+    '''
     # if the word's definition is found
     if definition:
         lemma = get_lemma(word)
@@ -78,3 +85,4 @@ def get_definition(word):
         # otherwise return that no definition was found
         else:
             return "No definition found."
+    '''
