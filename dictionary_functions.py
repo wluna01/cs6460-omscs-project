@@ -59,12 +59,20 @@ def get_definition(word):
     Returns: a list of English definitions
     """
     definition = get_response(word)
-
+    #first try to get the definition without lemmatizing
     if definition:
         add_flashcard(word)
         return definition
+    #if no definition is found, try to get the definition of the lemma
     else:
-        return "No definition found."
+        lemma = get_lemma(word)
+        definition = get_response(lemma)
+        if definition:
+            add_flashcard(lemma) # add lemma as flashcard
+            return definition # then return the definition
+        # otherwise return that no definition was found
+        else:
+            return "No definition found."
     
     '''
     # if the word's definition is found
