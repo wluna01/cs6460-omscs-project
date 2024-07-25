@@ -6,6 +6,17 @@ import streamlit as st
 stanza.download('es')
 stanza.download('en')
 
+def get_merriam_webster_credentials():
+    """Fetches Merriam-Webster credentials for dictionary API authentication.
+    Secrets available locally and via Streamlit Cloud.
+
+    Args: None
+
+    Returns:
+        str: Merriam-Webster API key
+    """
+    return st.secrets["MERRIAM_WEBSTER_API_KEY"]
+
 def get_response(word : str) -> list:
     """Retrieves the English translation of a Spanish word
         or the Spanish translation of an English word
@@ -16,7 +27,7 @@ def get_response(word : str) -> list:
     Returns: a list of English or Spanish definitions.
         Definitions will be in the language of the word not provided.
     """
-    api_key = os.getenv("MERRIAM_WEBSTER_API_KEY")
+    api_key = get_merriam_webster_credentials()
     url = f"https://www.dictionaryapi.com/api/v3/references/spanish/json/{word}?key={api_key}"
     response = requests.get(url).json()
     try:

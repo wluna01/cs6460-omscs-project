@@ -1,11 +1,23 @@
 import streamlit as st
 import os
 from google.cloud import texttospeech
+
+def get_tts_credentials() -> str:
+    """Fetches Google Cloud credentials for text-to-speech API authentication.
+    Secrets available locally and via Streamlit Cloud.
+
+    Args: None
+
+    Returns:
+        str: Google Cloud API key
+    """
+    return st.secrets["GCP_TTS_API_KEY"]
+
 # Function to convert text to speech
 @st.experimental_fragment
 def text_to_speech(text, language_code, voice_name, audio_encoding="MP3", output_file="output.mp3"):
 
-    api_key = os.getenv("gcp_tts_api_key")
+    api_key = get_tts_credentials()
 
     client_options = {"api_key": api_key}
     client = texttospeech.TextToSpeechClient(client_options=client_options)

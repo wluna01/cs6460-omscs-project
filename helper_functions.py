@@ -8,7 +8,7 @@ import pandas as pd
 import stanza
 stanza.download('es')
 
-def get_credentials():
+def get_snowflake_credentials():
     """Fetches Snowflake credentials for database authentication.
     Secrets available locally and via Streamlit Cloud.
 
@@ -17,15 +17,9 @@ def get_credentials():
     Returns:
         tuple: Snowflake credentials (user, password, account)
     """
-    
-    if 'SNOWFLAKE_USER' in os.environ: # Local development
-        snowflake_user = os.getenv('SNOWFLAKE_USER')
-        snowflake_password = os.getenv('SNOWFLAKE_PASSWORD')
-        snowflake_account = os.getenv('SNOWFLAKE_ACCOUNT')
-    else: # Streamlit Cloud
-        snowflake_user = st.secrets["SNOWFLAKE_USER"]
-        snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
-        snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
+    snowflake_user = st.secrets["SNOWFLAKE_USER"]
+    snowflake_password = st.secrets["SNOWFLAKE_PASSWORD"]
+    snowflake_account = st.secrets["SNOWFLAKE_ACCOUNT"]
     return snowflake_user, snowflake_password, snowflake_account
 
 def get_sql(template_file: str, **kwargs) -> str:
@@ -53,7 +47,7 @@ def execute_sql(query, returns_results=False):
         pd.DataFrame: A DataFrame representing the query results.
     """
     # Get Snowflake credentials
-    snowflake_user, snowflake_password, snowflake_account = get_credentials()
+    snowflake_user, snowflake_password, snowflake_account = get_snowflake_credentials()
 
     # Establish connection to Snowflake
     conn = snowflake.connector.connect(
