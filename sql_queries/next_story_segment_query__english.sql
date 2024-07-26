@@ -44,19 +44,19 @@ original_story_segment AS (
 
 ),
 
-combined as (
+combined AS (
 
-    select
+    SELECT
         original_story_segment.story_segment_text,
-        (select word from review_word) as review_word,
-        (select array_agg(word) from known_words) as known_words
-    from original_story_segment
+        (SELECT word FROM review_word) AS review_word,
+        (SELECT array_agg(word) FROM known_words) AS known_words
+    FROM original_story_segment
     
 ),
 
-rewritten as (
+rewritten AS (
 
-    select
+    SELECT
         story_segment_text,
         review_word,
         'Please rewrite a story excerpt to fulfill these criteria: ' AS intro_instruction,

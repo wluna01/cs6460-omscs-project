@@ -217,11 +217,20 @@ def update_vocabulary_model() -> None:
     execute_sql(sql)
 
 def add_story_segment() -> None:
-    query = get_sql(
-        "sql_queries/next_story_segment_query.sql",
-        user_name=st.session_state.user_name,
-        story_name=st.session_state.story_name
-    )
+    # if the story is in English, prompt the LLM in English
+    if st.session_state.story_name == "alice_in_wonderland":
+        query = get_sql(
+            "sql_queries/next_story_segment_query__english.sql",
+            user_name=st.session_state.user_name,
+            story_name=st.session_state.story_name
+        )
+    # otherwise, prompt the LLM in Spanish
+    else:
+        query = get_sql(
+            "sql_queries/next_story_segment_query__spanish.sql",
+            user_name=st.session_state.user_name,
+            story_name=st.session_state.story_name
+        )
     sql = get_sql(
         "sql_queries/generate_next_story_segment.sql",
         query=query
