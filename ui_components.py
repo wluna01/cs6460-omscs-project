@@ -60,7 +60,7 @@ def show_settings():
         st.session_state.auto_play = auto_play
         st.subheader("Instructions")
         st.caption("Currently only works for Spanish and English. If you want to see how the app works in English, change the story to Alice in Wonderland above.")
-        st.caption("Drag your cursor over a word to see its definition on the left.")
+        st.caption("Drag your cursor over a word to see its definition below.")
         st.caption("As you look up unknown words, the application builds a model of your vocabulary. Subsequent passages of text will be rewritten to cater to your current language level with unknown words added in to cement them in your long-term memory.")
         st.caption("Please be patient! The app is still in development and may be slow to load.")
         st.caption("The red plus (+) button does not do anything.")
