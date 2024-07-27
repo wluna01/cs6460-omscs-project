@@ -1,8 +1,11 @@
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://cs6460-omscs-project.streamlit.app/)
 
-# GRALE - Graded Reading through an Adaptive Language Environment
+# GRALE
+### Graded Reading through an Adaptive Language Environment
 
 [![UI Intro](readme_image.png)]
+
+
 
 ### How to run it on your own machine
 
