@@ -25,4 +25,4 @@ As the reader looks up unknown vocabulary with the built-in dictionary, the appl
    ```
 
 ### Secrets Management
-GRALE requires secrets from Snowflake, Merriam Webster, and Google Cloud. See the `example_secrets.toml` file
+GRALE requires secrets from Snowflake, Merriam Webster, and Google Cloud. See the `example_secrets.toml` file for details.
