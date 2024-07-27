@@ -1,4 +1,4 @@
-from helper_functions import execute_sql, add_flashcard, get_review_word, update_vocabulary_model, add_story_segment
+from helper_functions import execute_sql, add_flashcard, update_vocabulary_model, add_story_segment
 import streamlit as st
 
 def on_click_continue():

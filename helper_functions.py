@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 import snowflake.connector
 from snowflake.connector.pandas_tools import pd_writer

@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 from google.cloud import texttospeech
 
 def get_tts_credentials() -> str:
